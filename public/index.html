@@ -1,0 +1,173 @@
+<html>
+	<head>
+		<title>
+			Input a Message!
+		</title>
+		<style>
+            #chat{
+                /*background-color: #d8c93b;*/
+				
+				
+				/*border-color:#527f6e;*/ 
+				border-radius: 25px;
+				padding: 15px;
+				justify-content: center;
+				display: flex;
+				font-size: 20px;
+
+			}
+
+			#login{
+                /*background-color: #aadaee;*/
+				
+				
+				border-color:#527f6e; 
+				border-radius: 25px;
+				padding: 15px;
+				justify-content: center;
+				display: flex;
+				font-size: 20px;
+			}
+			/*these are the message outputs submitted by users*/
+			#messages{
+				background-color: white;
+				/* border-width:1px; 
+				border-style:solid; 
+				border-color:#1100ff; 
+				border-radius: 25px; */
+				/* padding: 1px;  */
+				text-align: center;
+				justify-content: center;
+				/*this is WHERE I WANNA WORK NEXT*/
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				font-size: 80px;
+				font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+				color: pink;
+            }
+
+			/*where the messages input by users appear*/
+			#chatbank{
+                background-color: rgb(170, 238, 183);
+				/* border-width:1px; 
+				border-style:solid; 
+				border-color:#1100ff; 
+				border-radius: 25px; */
+				/* padding: 1px;  */
+				text-align: center;
+				justify-content: center;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+            }
+
+			#username{
+				font-size: 120%;
+				color: pink;
+				border: 1 px solid #bdbdbd;
+				border-radius: 5 px;
+				padding: 5 px 5 px 5 px 30 px;
+				background-repeat: no-repeat;
+			}
+
+			#message{
+				font-size: 120%;
+				color: pink;
+				border: 1 px solid #bdbdbd;
+				border-radius: 5 px;
+				padding: 5 px 5 px 5 px 30 px;
+				background-repeat: no-repeat;
+			}
+
+			#name{
+				background-color: white;
+				border: 1 px solid #b1e1e4;
+			}
+
+			#chat2{
+				background-color: white;
+				border: 1 px solid #b1e1e4;
+			}
+
+
+        </style>
+		<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript">
+		
+			var socket = io.connect();
+			
+			socket.on('connect', function() {
+				console.log("Connected " + socket.id);
+			});
+
+			// Receive from any event \
+			socket.on('chatmessage', function (data) {
+				console.log(data);
+				//document.getElementById('messages').innerHTML = data + document.getElementById('messages').innerHTML;
+
+                let newmessage = document.createElement("DIV");
+                newmessage.innerHTML = data;
+                //newmessage.style
+                
+                document.getElementById('messages').appendChild(newmessage);
+
+			});
+
+            socket.on('named', function(data) {
+                console.log("Got user name: " + data);
+            });
+			
+			var sendmessage = function(message) {
+				console.log("chatmessage: " + message);
+				socket.emit('chatmessage', '<br>' + message + '<br>');
+				//socket.emit('newuser', '<br>' + socket.id + 'has entered the chat');
+
+			};
+
+			// socket.on('username', function (data) {
+			// 	console.log(data);
+			// 	//document.getElementById('named').innerHTML = data + document.getElementById('named').innerHTML;
+			// });
+
+			var setname = function(data) {
+				console.log("username: " + data);
+				socket.emit('named', '<br>' + data + '<br>');
+				//socket.emit('newuser', '<br>' + socket.id + 'has entered the chat');
+
+			};
+
+	
+		</script>	
+
+
+	</head>
+ <body style="background-color:palegreen">
+<div id="chatbank">
+ <text id="messages"></text>
+
+ <br>
+
+ <!-- <text>See your note here!</text> -->
+</div>
+
+<div>
+	<br>
+	<text id="login">
+		<input type="text" id="username" name="username">
+		<input type="submit" id = "name" value="confirm name" onclick="setname(document.getElementById('username').value);">
+		<!-- <input type="text" id="username" name="username">
+		<input type="submit" value2="is my name" onclick="setusername(document.getElementById('nickname').value2);"> -->
+		</text>
+		<br>
+ <text id="chat">
+ <input type="text" id="message" name="message">
+ <input type="submit" id="chat2" value="chat" onclick="sendmessage(document.getElementById('message').value);">
+ <!-- <input type="text" id="username" name="username">
+ <input type="submit" value2="is my name" onclick="setusername(document.getElementById('nickname').value2);"> -->
+ </text>
+ <br>
+ <br>
+</div>
+ </body>
+</html>
